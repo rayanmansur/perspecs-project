@@ -31,28 +31,28 @@ time_per_frame = 1/frames_per_second
 
 exitdoorimage = pygame.image.load("exitdoor.png")
 
-background1 = pygame.image.load("background1.png")
+background1 = pygame.image.load("background1.png").convert()
 background1 = pygame.transform.scale(background1, (1000, 600))
 
-background2 = pygame.image.load("background2.png")
+background2 = pygame.image.load("background2.png").convert()
 background2 = pygame.transform.scale(background2, (1000, 600))
 
-background3 = pygame.image.load("background3.png")
+background3 = pygame.image.load("background3.png").convert()
 background3 = pygame.transform.scale(background3, (1000, 600))
 
-background4 = pygame.image.load("background4.png")
+background4 = pygame.image.load("background4.png").convert()
 background4 = pygame.transform.scale(background4, (1000, 600))
 
-background5 = pygame.image.load("background5.png")
+background5 = pygame.image.load("background5.png").convert()
 background5 = pygame.transform.scale(background5, (1000, 600))
 
-background6 = pygame.image.load("background6.png")
+background6 = pygame.image.load("background6.png").convert()
 background6 = pygame.transform.scale(background6, (1000, 600))
 
-background7 = pygame.image.load("background7.png")
+background7 = pygame.image.load("background7.png").convert()
 background7 = pygame.transform.scale(background7, (1000, 600))
 
-background8 = pygame.image.load("background8.png")
+background8 = pygame.image.load("background8.png").convert()
 background8 = pygame.transform.scale(background8, (1000, 600))
 
 backgroundimage = background1
