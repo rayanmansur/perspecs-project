@@ -1,11 +1,15 @@
 import pygame
 import random
 import math
-import json
+import sys, os 
 
 pygame.init()
+current_path_directory = (str(os.path.dirname(os.path.abspath(__file__))) +"\\").replace("c:", "C:")
+current_path_directory = current_path_directory.replace('\\', "/")
+print(current_path_directory)
 
-BLACK       = (   0,   0,   0)
+
+BLACK       = (  50,  50,  50)
 WHITE       = ( 255, 255, 255)
 GREEN       = (   0, 255,   0)
 RED         = ( 255,   0,   0)
@@ -23,47 +27,60 @@ screen_height = 600
 size = (screen_width,screen_height)
 screen = pygame.display.set_mode(size)
 game_over = False
+retry = False
 pygame.display.set_caption("Perspecs")
 clock = pygame.time.Clock()
 prototype = "prototype.png"
 frames_per_second = 120
 time_per_frame = 1/frames_per_second
 
-exitdoorimage = pygame.image.load("exitdoor.png")
+# musictrackpath = current_path_directory +("audio/perspecssolotrack.mp3").replace("\\", "/")
+# print(musictrackpath)
 
-background1 = pygame.image.load("background1.png").convert()
+
+
+# bgmusic = pygame.mixer.music.load(musictrackpath)
+
+
+
+boxsquare = current_path_directory +("textures/boxsquare.png")
+boxrectangle = current_path_directory +("textures/boxrectangle.png")
+
+exitdoorimage = pygame.image.load(current_path_directory +("textures/exitdoor.png"))
+
+background1 = pygame.image.load(current_path_directory +("textures/background1.png")).convert()
 background1 = pygame.transform.scale(background1, (1000, 600))
 
-background2 = pygame.image.load("background2.png").convert()
+background2 = pygame.image.load(current_path_directory +("textures/background2.png")).convert()
 background2 = pygame.transform.scale(background2, (1000, 600))
 
-background3 = pygame.image.load("background3.png").convert()
+background3 = pygame.image.load(current_path_directory +("textures/background3.png")).convert()
 background3 = pygame.transform.scale(background3, (1000, 600))
 
-background4 = pygame.image.load("background4.png").convert()
+background4 = pygame.image.load(current_path_directory +("textures/background4.png")).convert()
 background4 = pygame.transform.scale(background4, (1000, 600))
 
-background5 = pygame.image.load("background5.png").convert()
+background5 = pygame.image.load(current_path_directory +("textures/background5.png")).convert()
 background5 = pygame.transform.scale(background5, (1000, 600))
 
-background6 = pygame.image.load("background6.png").convert()
+background6 = pygame.image.load(current_path_directory +("textures/background6.png")).convert()
 background6 = pygame.transform.scale(background6, (1000, 600))
 
-background7 = pygame.image.load("background7.png").convert()
+background7 = pygame.image.load(current_path_directory +("textures/background7.png")).convert()
 background7 = pygame.transform.scale(background7, (1000, 600))
 
-background8 = pygame.image.load("background8.png").convert()
+background8 = pygame.image.load(current_path_directory +("textures/background8.png")).convert()
 background8 = pygame.transform.scale(background8, (1000, 600))
 
 backgroundimage = background1
 
-leftplayer = "left.png"
-rightplayer = "right.png"
+leftplayer = current_path_directory +("textures/left.png")
+rightplayer = current_path_directory +("textures/right.png")
 
 ending = False
 
-guntextureright = "guntexturerightextension.png"
-guntextureleft = "guntextureleftextension.png"
+guntextureright = current_path_directory +("textures/guntexturerightextension.png")
+guntextureleft = current_path_directory +("textures/guntextureleftextension.png")
 
 level = 0
 levelincremention = False
@@ -123,7 +140,7 @@ class Gun(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect()
         self.rect.x = self.player.rect.x + ((self.player.width) + 10)
-        self.rect.y = self.player.rect.y + ((self.player.height/2) - 5)
+        self.rect.y = self.player.rect.y + (int(round(self.player.height/2)) - 5)
 
         self.gunrotationangle = 0
         self.gun_line_colour = "transparent"
@@ -135,12 +152,12 @@ class Gun(pygame.sprite.Sprite):
 
         if self.player.direction == "right":
             self.rect.x = self.player.rect.x + ((self.player.width) - 10)
-            self.rect.y = self.player.rect.y + ((self.player.height/2) - 20)
+            self.rect.y = self.player.rect.y + (int(round(self.player.height/2)) - 20)
             self.picture = pygame.transform.scale(self.guntextureright, (self.width, self.height))
             self.image = self.picture
         elif self.player.direction == "left":
             self.rect.x = self.player.rect.x - ((self.width) - 10)
-            self.rect.y = self.player.rect.y + ((self.player.height/2) - 20)
+            self.rect.y = self.player.rect.y + (int(round(self.player.height/2)) - 20)
             self.picture = pygame.transform.scale(self.guntextureleft, (self.width, self.height))
             self.image = self.picture
 
@@ -258,6 +275,8 @@ class RectShader(pygame.sprite.Sprite):
 class Player(pygame.sprite.Sprite):
     def __init__(self, width, height, x_pos, y_pos):
         super().__init__()
+        
+        
         self.width = width
         self.height = height
         picture = pygame.image.load(rightplayer)
@@ -270,6 +289,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.y = y_pos
         self.xspeed = 0
         self.yspeed = 0
+        
 
         self.grounded = False
         self.ygroundposition = 10000
@@ -367,9 +387,9 @@ class Player(pygame.sprite.Sprite):
             self.grounded = True
         
         if self.rect.x+self.width > self.xwallstart and self.rect.x+self.width < self.xwallend:
-            self.rect.x = self.xwallstart - self.width - 0.5
+            self.rect.x = self.xwallstart - self.width - 1
         elif self.rect.x < self.xwallend and self.rect.x > self.xwallstart:
-            self.rect.x = self.xwallend + 0.5
+            self.rect.x = self.xwallend + 1
         
         if self.rect.y > self.ygroundposition - 10:
             self.grounded = False
@@ -381,9 +401,24 @@ class Player(pygame.sprite.Sprite):
         
 
         if self.rect.y > 1000:
-            self.setyspeed(0.1)
-            #self.rect.x = self.resetxpos
-            self.rect.y = self.resetypos
+            global level, levelincremention, all_shapes, all_grounds, all_grounds_shapes, rectangletracers, exitdoors, loadedlevel, retry
+            
+            if level == 7:
+                retry = True
+                level = 0
+                self.rect.x = 0
+                self.rect.y = 350
+                levelincremention = True
+                all_shapes = pygame.sprite.Group()
+                all_grounds = pygame.sprite.Group()
+                all_grounds_shapes = pygame.sprite.Group()
+                rectangletracers = pygame.sprite.Group()
+                exitdoors = pygame.sprite.Group()
+                loadedlevel = False
+            else:
+                self.setyspeed(0.1)
+                #self.rect.x = self.resetxpos
+                self.rect.y = self.resetypos
         
         self.rect.y += self.yspeed
         self.rect.x += self.xspeed
@@ -409,11 +444,17 @@ class Rectangle(pygame.sprite.Sprite):
         super().__init__()
         self.width = width
         self.height = height
-
+        self.ratio = self.width/self.height
         # self.image = pygame.Surface([200,200])
         # self.image.fill(WHITE)
+        
 
-        self.picture1 = pygame.image.load(prototype)
+        if self.ratio == 1:
+            self.texture = boxsquare
+        elif self.ratio == 2:
+            self.texture = boxrectangle
+        
+        self.picture1 = pygame.image.load(self.texture)
         self.picture = pygame.transform.scale(self.picture1, (width, height))
         self.image = self.picture
         
@@ -442,7 +483,10 @@ class Rectangle(pygame.sprite.Sprite):
         elif weight == "heavy":
             self.gravitationalspeed = 0.4
 
-        self.ratio = self.width/self.height
+        self.resetwidth = width
+        self.resetheight = height
+        self.resetx = x_pos
+        self.resety = y_pos
         
         # self.drag = DragOperator(self.rect)
         self.mouse = pygame.Surface((5,5))
@@ -461,6 +505,19 @@ class Rectangle(pygame.sprite.Sprite):
 
         self.resetxpos = self.rect.x
         self.resetypos = self.rect.y
+
+    def reset_attributes(self):
+        self.width = self.resetwidth
+        self.height = self.resetheight
+        self.scaling_potential_width = self.resetwidth
+        self.scaling_potential_height = self.resetheight
+        self.picture1 = pygame.image.load(self.texture)
+        self.picture = pygame.transform.scale(self.picture1, (self.width, self.height))
+        self.image = self.picture
+        self.rect = self.image.get_rect()
+        self.rect.x = self.resetxpos
+        self.rect.y = self.resetypos
+
 
     def resetygroundposition(self):
         self.ygroundposition = 10000
@@ -684,8 +741,8 @@ class Rectangle(pygame.sprite.Sprite):
         self.rect.y += self.yspeed
 
         if self.rect.y > 1500:
-            self.setyspeed(0)
-            self.rect.y = self.resetypos
+            self.setyspeed(0.1)
+            self.rect.y = -250
             self.rect.x = self.resetxpos
         
         if self.rect.x < 0:
@@ -956,7 +1013,7 @@ ground13 = Ground(200, 700, 0, 200)
 #####################                       level 7
 Exit7 = ExitDoor(850, 370)
 ground14 = Ground(500, 700, 200, 200)
-ground15 = Ground(200, 300, 800, 500)
+ground15 = Ground(300, 300, 700, 500)
 rectangle6 = Rectangle(200, 200, 500, 0, "light")
 rectangle6_left_groundtracer = GroundWallTracer(rectangle6, "rectangle", "left")
 rectangle6_right_groundtracer = GroundWallTracer(rectangle6, "rectangle", "right")
@@ -983,7 +1040,8 @@ tracers.add(player_right_groundtracer)
 
 # rectangle2_right_groundtracer = GroundWallTracer(rectangle2, "rectangle", "right")
 # rectangletracers.add(rectangle2_right_groundtracer)
-
+# if str(audio)!= "0":
+#     pygame.mixer.music.play(100)
 
 while not game_over:
     if loadedlevel == False:
@@ -1378,8 +1436,17 @@ while not game_over:
             loadedlevel = False
         playerexitcollision = []
 
-    screen.blit(backgroundimage, (0,0))
+    if retry == True:
+        retry = False
+        rectangle1.reset_attributes()
+        rectangle2.reset_attributes()
+        rectangle3.reset_attributes()
+        rectangle4.reset_attributes()
+        rectangle5.reset_attributes()
+        rectangle6.reset_attributes()
 
+    screen.blit(backgroundimage, (0,0))
+        
     #print(pygame.mouse.get_pressed()[0])
     all_shapes.update()
     playergroup.update()
